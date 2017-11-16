@@ -1,0 +1,41 @@
+controller code
+    public function actionIndex($id = null)
+    {
+
+        if($id != null)
+        {
+            $model = Service::find()->where(['id' => $id])->one();
+            return $this->render('item', [
+                'model' => $model
+            
+        ]);
+        }
+            else{
+        $searchModel = new ServiceSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+
+
+index file 
+
+
+<div class="service-index">
+
+    <h1><?= Html::encode($this->title) ?></h1>
+   <?= ListView::widget([
+        'dataProvider' => $dataProvider,
+        'itemOptions' => ['class' => 'item'],
+        'layout' => "{pager}\n{items}",
+        'itemView' => function ($model, $key, $index, $widget) {
+            return $this->render('item',['model' => $model]);
+        },
+    ]); ?>
+
+</div>
